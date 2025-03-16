@@ -148,3 +148,56 @@ For example: <br/>
 ROUND(123.456, 2) = 123.46<br/>
 And<br/>
 ROUND(123.456,-2) = 120.000
+
+# ORDER BY
+The ORDER BY statement is used to sort one or more fields. What is does is basically sort the data from smallest to largest by or alphabetically by default. If you want to sort it the reverse method then you have to add DESC after the column name.<br/>
+
+SELECT Title, Ratings<br/>
+FROM Movies<br/>
+ORDER BY Ratings DESC
+
+This query retrieves the Title and Ratings columns from the Movies dataset and sorts them from highest to lowest rating.
+
+Again ORDER BY can sort through multiple fields where the second field acts as a tie-breaker when the first field has duplicate values:<br/>
+
+SELECT Title, Ratings<br/>
+FROM Movies<br/>
+ORDER BY Title ASC , Ratings DESC
+
+This query will select the title and ratings columns from the movies dataset and it will order by the title column alphabetically but if for some reason there are movies with the same title for example a series then it will order the series by rating from best to worst. 
+
+# GROUP BY
+The GROUP BY statement is a really important part of SQL. As the name states, the GROUP BY statement is used to group your data. What the group by groups are the values where it is the same. The GROUP BY statement is normally used along with aggregate functions to provide summary statistics. 
+
+SELECT Genres, COUNT(genres)<br/>
+FROM Movies<br/>
+GROUP BY Genres
+
+Here, the GROUP BY statement groups all the movies by their Genres and counts the number of movies in each genre.
+
+# Having
+The HAVING statement is more situational, but it is used when it is necessary. The HAVING statement filters through your aggregated data or groups, as the WHERE statement can’t. Once your data has been aggregated and grouped, the HAVING statement filters through each group. 
+
+Sometimes it is also important to understand the order of execution to understand why we can’t use WHERE to filter through our grouped data.
+With SQL the order of execution is not the order it is written.
+
+1. FROM
+2. WHERE (filters individual rows)
+3. GROUP BY (groups the filtered data)
+4. HAVING (filters groups)
+5. SELECT
+6. ORDER BY
+7. LIMIT
+
+Since WHERE is executed before GROUP BY, it cannot filter grouped data. Instead, HAVING is used after grouping to filter groups based on the conditions.
+
+# Alias
+Aliases improve readability and help avoid mistakes by renaming columns or tables in SQL queries. The AS keyword assigns a temporary name to a column or calculation.
+
+SELECT Title, AVG(Ratings) as AvgRatings <br/>
+FROM Movies<br/>
+GROUP BY Title<br/>
+HAVING AvgRatings >= 7<br/>
+ORDER BY AvgRatings
+
+The query assigns the average rating column a name AvgRating, filters for movies with average rating greater than 7, and sorts the results in descending order.
