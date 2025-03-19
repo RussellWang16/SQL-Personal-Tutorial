@@ -201,3 +201,83 @@ HAVING AvgRatings >= 7<br/>
 ORDER BY AvgRatings
 
 The query assigns the average rating column a name AvgRating, filters for movies with average rating greater than 7, and sorts the results in descending order.
+
+# Joins
+
+This is an essential part of SQL. With JOIN, you can combine multiple datasets, and even perform self-joins if needed. Below is an illustration that best shows the different join types.
+
+To join tables, you need a common column as a reference—one that appears in both tables. For example, imagine we have a dataset called Movies, where each movie has a unique MovieID. We also have another dataset called Cast, which contains information about directors, actors, and production teams. This table also includes an ID column that corresponds to MovieID in the Movies table.
+
+Movies Table
+MovieID	Title	Genre	Year	Rating	Summary
+Cast Table
+ID	Director	Actors	Production Team	Background Cast
+Since both tables share a related column (MovieID in Movies and ID in Cast), we can join them using different types of joins, depending on the results we want.
+
+Types of Joins<br/>
+- INNER JOIN
+- LEFT JOIN
+- RIGHT JOIN
+- OUTER JOIN (FULL JOIN)
+- CROSS JOIN
+- UNION <br/>
+Understanding how each join works is crucial for analyzing data across multiple tables.
+
+# INNER JOIN
+An INNER JOIN returns only the matching rows from both tables. If a record in one table doesn’t have a match in the other, it won’t be included in the results.
+
+Example: Joining the Movies and Cast tables on MovieID.
+
+SELECT *  <br/>
+FROM Movies  <br/>
+JOIN Cast  <br/>
+ON Movies.MovieID = Cast.ID <br/>
+This query returns only the rows where MovieID and ID match. Any movie without a matching record in Cast, or vice versa, will be excluded.
+
+# LEFT JOIN & RIGHT JOIN
+The placement of tables matters when using LEFT JOIN or RIGHT JOIN because the join results depend on which table appears on the left or right side of the ON condition.
+
+LEFT JOIN: Returns all rows from the left table and only matching rows from the right table. If no match is found, NULL is returned for columns from the right table.
+RIGHT JOIN: Returns all rows from the right table and only matching rows from the left table. If no match is found, NULL is returned for columns from the left table.
+
+Left Join example
+SELECT *  <br/>
+FROM Movies  <br/>
+LEFT JOIN Cast  <br/>
+ON Movies.MovieID = Cast.ID <br/>
+Since Movies is the left table, all rows from Movies will be displayed. If there’s no matching ID in Cast, NULL values will be shown in those columns.
+
+Right Join example
+SELECT *  <br/>
+FROM Movies  <br/>
+RIGHT JOIN Cast  <br/>
+ON Movies.MovieID = Cast.ID <br/>
+Since Cast is the right table, all rows from Cast will be displayed. Any movies without a matching ID will show NULL values in their respective columns.
+
+# OUTER JOIN (FULL JOIN)
+A FULL OUTER JOIN (or OUTER JOIN) returns all records from both tables. If there is no match, NULL values are returned for missing data.
+
+SELECT *  <br/>
+FROM Movies  <br/>
+FULL OUTER JOIN Cast  <br/>
+ON Movies.MovieID = Cast.ID <br/>
+This query returns all rows from both Movies and Cast, filling in NULLs where matches do not exist.
+
+# UNION
+UNION combines the results of two queries into a single result set. However, the number of columns must be the same, and the data types must match.
+
+Example: We will use two different tables than the Movies and Cast tables, New_York and New_Jersey, containing county information, we can list all counties from both tables using UNION.
+
+SELECT County FROM New_York  <br/>
+UNION  <br/>
+SELECT County FROM New_Jersey <br/>
+This query returns a combined list of county names from both states.
+
+# CROSS JOIN
+A CROSS JOIN generates all possible combinations of two tables. It’s useful for scenarios like pairing different types of T-shirts with pants, or matching various drinks with different meals. Since every row from the first table is matched with every row from the second table, the result set can be large.
+
+SELECT *  <br/>
+FROM TShirts  <br/>
+CROSS JOIN Pants <br/>
+This will return all possible T-shirt and pants combinations.
+
