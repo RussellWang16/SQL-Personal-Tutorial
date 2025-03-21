@@ -281,3 +281,115 @@ FROM TShirts  <br/>
 CROSS JOIN Pants <br/>
 This will return all possible T-shirt and pants combinations.
 
+# Advanced
+
+# Table Manipulation in SQL
+SQL allows you to manipulate data within your tables by updating, deleting, and inserting values, as well as handling missing or incorrect data.
+
+# UPDATE 
+The UPDATE statement modifies existing values in a table. It follows this structure.
+
+UPDATE TableName<br/>
+SET ColumnName = value1, ColumnName2 = value2, ...<br/>
+WHERE Condition<br/>
+When updating a table, you must specify the table name, the columns to be updated, and the condition that determines which rows should be modified. Be careful! If you don’t include a WHERE clause, all rows in the specified column will be updated.
+
+Example:<br/>
+Fixing a typo in a movie title:<br/>
+
+UPDATE Movies<br/>
+SET Title = 'The Godfather'<br/>
+WHERE Title = 'The Gofdather'<br/>
+If you make a mistake, SQL does not provide an undo option, so always double-check your query before execution. Restoring the original data may be the only way to fix an incorrect update.
+
+# DELETE 
+The DELETE statement removes specific rows from a table.
+
+DELETE FROM TableName<br/>
+WHERE Condition <br/>
+Like UPDATE, if you don’t include a WHERE clause, all rows in the table will be deleted. Before deleting anything, a good practice is to use SELECT first to preview the data you’re about to remove.
+
+Example<br/>
+Removing a movie from the dataset<br/>
+
+DELETE FROM Movies<br/>
+WHERE Title = 'The Last Airbender'<br/>
+Lets be honestly who wants to watch the live action version of a great show.
+
+Always preview before making changes so before running UPDATE or DELETE, use SELECT first to verify the data you’re modifying:
+
+SELECT * <br/>
+FROM Movies <br/>
+WHERE Title = 'The Last Airbender' <br/>
+Once confirmed, then proceed with DELETE or UPDATE.
+
+This prevents accidental modifications and helps avoid unrecoverable mistakes.
+
+# INSERT INTO 
+The INSERT INTO statement adds new values to a table.
+
+INSERT INTO TableName (Column1, Column2, ...) <br/>
+VALUES (Value1, Value2, ...) <br/>
+If you are adding values to all columns, you don’t need to specify column names:
+
+INSERT INTO TableName  <br/>
+VALUES (Value1, Value2, ...)<br/>
+Example:<br/>
+Adding a new movie to the Movies table:
+
+INSERT INTO Movies (Title, Genre, Year, Rating)<br/>
+VALUES ('Sonic the Hedgehog 3', 'Action, Adventure, Comedy', '2024', '7/10') <br/>
+Each value corresponds to its respective column.
+
+# ALTER TABLE 
+The ALTER TABLE statement modifies the structure of an existing table. For example, if you want to add a new column, specify its name and data type.
+
+ALTER TABLE Movies<br/>
+ADD Production_Studio VARCHAR(255)<br/>
+
+Common Data Types in SQL<br/>
+- INT – Whole numbers
+- FLOAT – Decimal numbers
+- VARCHAR(size) – Variable-length text
+- TEXT(size) – Large text storage
+- DATE, DATETIME – Date and time values
+
+# REPLACE 
+The REPLACE() function replaces occurrences of a substring within a string. It is case-sensitive.
+
+SELECT REPLACE('String', 'Old Substring', 'New Substring')<br/>
+Example<br/>
+Changing a movie title<br/>
+
+SELECT REPLACE('The Godfather', 'Godfather', 'Menu')<br/>
+FROM Movies <br/>
+This replaces "Godfather" with "Menu", resulting in "The Menu".
+
+You can also use REPLACE() on a column to update multiple values<br/>
+
+SELECT REPLACE(ColumnName, 'Old Substring', 'New Substring')<br/>
+FROM TableName<br/>
+This scans the entire column and replaces all instances of the old substring.
+
+# COALESCE 
+COALESCE() returns the first non-null value from a list.
+
+SELECT COALESCE(null, null, null, 'Moana', null, null, 3)<br/>
+Output: Moana
+It stops at the first non-null value.
+
+You can also use COALESCE() to replace NULL values in a column.
+
+SELECT COALESCE(Title, 'Not Found')<br/>
+FROM Movies<br/>
+Here, if a movie title is NULL, it will be replaced with "Not Found".
+
+# IFNULL and ISNULL 
+IFNULL() (MySQL) and ISNULL() (SQL Server) work similarly to COALESCE() but only check one value.
+
+SELECT IFNULL(Title, 'Not Found') FROM Movies<br/>
+
+For SQL Server:<br/>
+SELECT ISNULL(Title, 'Not Found') FROM Movies<br/>
+These functions replace NULL values with "Not Found".
+
