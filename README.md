@@ -432,7 +432,7 @@ Temp tables are stored in the database for reuse during a session. Unlike CTEs, 
 
 Because temp tables store data in memory, altering them after creation can cause issues. If you modify a temp table, you must drop it first before recreating it to avoid errors.
 
-Creating a Temporary Table syntax
+Creating a Temporary Table syntax<br/>
 DROP TABLE IF EXISTS temp_table  -- Prevents errors if the table already exists  <br/>
 CREATE TEMPORARY TABLE temp_table (  <br/>
     Column1 INT,  <br/>
