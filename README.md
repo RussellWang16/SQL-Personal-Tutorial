@@ -393,3 +393,57 @@ For SQL Server:<br/>
 SELECT ISNULL(Title, 'Not Found') FROM Movies<br/>
 These functions replace NULL values with "Not Found".
 
+# CTE Tables vs. Temp Tables
+Before using temp tables, always remember to DROP the table if it exists; otherwise, the query may not work properly.
+
+CTE (Common Table Expressions) and temporary tables both serve similar purposes. They allow you to store data temporarily for analysis, but the choice between them depends on how many rows you need to store and how you plan to use the data.
+
+# CTE Tables
+A Common Table Expression (CTE) is a temporary result set that exists only for the duration of a query. <br/>
+The basic syntax is<br/>
+WITH TableName AS (<br/>
+    SELECT ...<br/>
+    FROM ...<br/>
+    WHERE ...<br/>
+)<br/>
+SELECT ...<br/>
+FROM TableName
+
+Example:
+WITH GoodMovies AS (<br/>
+    SELECT Title, Rating, Genres<br/>
+    FROM Movies<br/>
+    WHERE Rating > 7<br/>
+)<br/>
+SELECT Genres, AVG(Rating) AS AvgRating<br/>
+FROM GoodMovies <br/>
+GROUP BY Genres<br/>
+ORDER BY AvgRating
+
+In this query a CTE table named GoodMovies is created to store movies with ratings higher than 7. The CTE is then used to calculate the average rating per genre for highly rated movies.
+
+Some important key points to remember about CTE tables:
+- CTEs only exist for the duration of the query—once the query is complete, the table disappears.
+- A CTE can only be referenced once per query. If you need to use it multiple times, you either need to copy the CTE or use a temp table instead.
+- Within a CTE: Unlike regular queries, CTEs cannot use ORDER BY unless combined with TOP or LIMIT.
+
+# Temporary Tables
+Temp tables are stored in the database for reuse during a session. Unlike CTEs, they persist in memory until manually deleted or the session ends.
+
+Because temp tables store data in memory, altering them after creation can cause issues. If you modify a temp table, you must drop it first before recreating it to avoid errors.
+
+Creating a Temporary Table syntax
+DROP TABLE IF EXISTS temp_table  -- Prevents errors if the table already exists  <br/>
+CREATE TEMPORARY TABLE temp_table (  <br/>
+    Column1 INT,  <br/>
+    Column2 VARCHAR(255),  <br/>
+    Column3 DATE  <br/>
+) 
+
+- The DROP TABLE IF EXISTS temp_table: deletes the table if it already exists. Preventing any error from forming.
+- CREATE TEMPORARY TABLE temp_table: creates a new temporary table.
+- Defining the columns: specify the column names and data types within the parentheses. More columns can always be added as needed.
+
+Once the temp table is created, you can reference it multiple times in your queries. Temp tables are better than CTEs when working with large datasets or complex operations requiring multiple steps.
+
+At the end of the day the main difference between CTE tables and Temp tables are that CTE tables can only used once for a query and temp tables can be referenced multiple times until the session is over or manually terminated. When you use each tables depends on task and efficiency of the operation. 
