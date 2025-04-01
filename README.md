@@ -447,3 +447,67 @@ CREATE TEMPORARY TABLE temp_table (  <br/>
 Once the temp table is created, you can reference it multiple times in your queries. Temp tables are better than CTEs when working with large datasets or complex operations requiring multiple steps.
 
 At the end of the day the main difference between CTE tables and Temp tables are that CTE tables can only used once for a query and temp tables can be referenced multiple times until the session is over or manually terminated. When you use each tables depends on task and efficiency of the operation. 
+
+# Windows Function
+Window functions are an advanced SQL feature that performs calculations for each row. Unlike aggregate functions, which groups data and return a single result per group, window functions perform calculations across different rows while retaining each row's identity.
+
+Think of window functions as a way to apply aggregate calculations having to group the data. Instead of collapsing rows into a single value (as aggregation does), the computed values are appended to each row, preserving all existing data.
+
+To use a window function, you need the OVER() clause, which defines how the function is applied. Within the OVER() clause, you can use:
+
+- PARTITION BY – Divides data into groups.
+
+- ORDER BY – Determines the order of calculation.
+
+# Types of Window Functions
+SQL provides several window functions, including:
+
+- RANK() – Assigns a ranking to rows, skipping ranks for duplicates.
+
+- DENSE_RANK() – Similar to RANK(), but does not skip ranks for duplicates.
+
+- ROW_NUMBER() – Assigns a unique row number to each row.
+
+- NTILE(N) – Distributes rows into N equal groups.
+
+- Aggregate functions (e.g., SUM(), AVG(), COUNT(), MIN(), MAX()) – Applied across partitions or entire datasets.
+
+Using RANK()<br/>
+Consider a students table with names, scores, and subjects which can be found in the excel file along with the result of the query: <br/>
+
+SELECT Name, Score, RANK() OVER(ORDER BY Score DESC) AS Ranking<br/>
+FROM students
+
+Essentially RANK assigns the same rank to duplicate values but the next rank is skipped. In our results we can see that James was skipped a rank where instead of being given the rank 4, James was given the rank 5 because the 2 previous rows had duplicate scores.
+
+DENSE_RANK() Function<br/>
+The DENSE_RANK() function works similarly to RANK(), but it does not skip rankings for duplicate values.
+
+SELECT Name, Score, DENSE_RANK() OVER(ORDER BY Score DESC) AS Ranking<br/>
+FROM students
+
+In the excel file, where the result of the query is stored, unlike RANK(), DENSE_RANK() does not skip any numbers. 
+
+Common Mistakes with RANK() and DENSE_RANK()
+
+- Confusing RANK() with DENSE_RANK(): Remember, RANK() skips rankings for duplicates, while DENSE_RANK() does not.
+
+- Forgetting ORDER BY in OVER Clause: ORDER BY is required to determine ranking order.
+
+- Not Using PARTITION BY When Needed: Without PARTITION BY, ranking functions operate over the entire dataset.
+
+Using Aggregate Functions with Window Functions
+
+Window functions can also be used with aggregate functions. If no PARTITION BY clause is specified, the function operates on the entire dataset.
+
+SELECT Name, Score, SUM(Score) OVER() AS Total_Score<br/>
+FROM students
+
+In our query, the windows function will make it so that each row will have the sum all the rows. 
+
+With PARTITION BY<br/>
+SELECT Name, Score, Subject, SUM(Score) OVER(PARTITION BY Subject) AS Subject_Sum<br/>
+FROM students
+
+Now each row has the sum of the scores for based off of each subject. 
+
