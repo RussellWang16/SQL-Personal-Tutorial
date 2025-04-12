@@ -466,6 +466,8 @@ SQL provides several window functions, including:
 
 - DENSE_RANK() – Similar to RANK(), but does not skip ranks for duplicates.
 
+- LAG() - The lag function is used to access the previous rows with the defined offset values.
+
 - ROW_NUMBER() – Assigns a unique row number to each row.
 
 - NTILE(N) – Distributes rows into N equal groups.
@@ -511,3 +513,5 @@ FROM students
 
 Now each row has the sum of the scores for based off of each subject. 
 
+
+LAG()
